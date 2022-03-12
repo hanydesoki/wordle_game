@@ -1,5 +1,33 @@
 import pygame
+
 import math
+import string
+import random
+
+all_letters = list(string.ascii_lowercase + string.ascii_uppercase)
+
+def check_valid_word(word):
+    for caracter in word:
+        if caracter not in all_letters:
+            return False
+
+    return True
+
+def load_words(number_letters):
+    with open('liste_francais.txt', 'r') as f:
+        all_words = f.readlines()
+
+    result = []
+
+    for word in all_words:
+        w = word.replace('\n', '')
+        if check_valid_word(w) and len(w) == number_letters:
+            result.append(w.upper())
+
+    return result
+
+
+
 
 class Board:
 
@@ -7,35 +35,88 @@ class Board:
 
     def __init__(self, number_letters=5):
         self.screen = pygame.display.get_surface()
+
+        self.max_try = 6
+
+        self.init(number_letters)
+
+    def init(self, number_letters):
         self.number_letters = number_letters
         self.x_min = self.screen.get_width() // 2 - (Tile.TILE_SIZE + self.OFFSET) * self.number_letters // 2
         self.y_min = 150
 
-        self.max_try = 6
-
-        self.init()
-
-    def init(self):
         self.board = []
         for i in range(self.max_try):
             self.board.append([Tile((self.x_min + j * (Tile.TILE_SIZE + self.OFFSET),
                                      self.y_min + i * (Tile.TILE_SIZE + self.OFFSET))) for j in range(self.number_letters)])
-
         #self.board[0][0].set_target_color(Tile.GREEN)
 
         self.current_try = 0
         self.letter_indice = 0
 
+        self.words = load_words(number_letters)
+        self.word_to_guess = random.choice(self.words)
+
+        print(self.word_to_guess)
+        self.check_animating = False
+        self.animation_indice = 0
+        self.animation_frame = 0
+        self.max_animation_frame = 30
+
+
     def input(self, all_events):
-        for event in all_events:
-            if event.type == pygame.KEYDOWN:
+        if not self.check_animating:
+            for event in all_events:
+                if event.type == pygame.KEYDOWN:
 
-                if event.key == pygame.K_SPACE:
-                    pass
+                    if event.key == pygame.K_RETURN and self.letter_indice == self.number_letters:
+                        word = self.get_word_current_try()
+                        if word in self.words:
+                            self.check_animating = True
+                            self.current_try += 1
+                            self.letter_indice = 0
 
-                else:
-                    key_pressed = event.unicode
+                    elif event.key == pygame.K_BACKSPACE and self.letter_indice != 0:
+                        self.board[self.current_try][self.letter_indice - 1].letter = ""
+                        self.letter_indice -= 1
 
+                    else:
+                        if self.letter_indice < self.number_letters:
+                            key_pressed = event.unicode
+                            if key_pressed in all_letters:
+                                self.board[self.current_try][self.letter_indice].letter = key_pressed.upper()
+                                self.letter_indice += 1
+
+
+    def word_check_animation(self):
+        if self.check_animating:
+            if self.animation_frame == 0:
+                tile = self.board[self.current_try - 1][self.animation_indice]
+                if tile.letter == self.word_to_guess[self.animation_indice]:
+                    tile.set_target_color(Tile.GREEN)
+
+                elif tile.letter in self.word_to_guess:
+                    tile.set_target_color(Tile.ORANGE)
+
+                pygame.draw.rect(self.screen, color="yellow", rect=tile.surf.get_rect(topleft=tile.pos), width=3)
+
+            self.animation_frame += 1
+            if self.animation_frame > self.max_animation_frame:
+                self.animation_frame = 0
+                self.animation_indice += 1
+                if self.animation_indice == self.number_letters:
+                    self.animation_indice = 0
+                    self.check_animating = False
+
+
+
+
+    def get_word_current_try(self):
+        word = ""
+        for tile in self.board[self.current_try]:
+            word += tile.letter
+
+        return word
 
     def update_tiles(self):
         for row in self.board:
@@ -45,12 +126,13 @@ class Board:
     def update(self, all_events):
         self.input(all_events)
         self.update_tiles()
+        self.word_check_animation()
 
 
 
 class Tile:
     GREY = (150, 150, 150)
-    GREEN = (150, 254, 150)
+    GREEN = (150, 250, 150)
     ORANGE = (200, 200, 100)
 
     TILE_SIZE = 50
@@ -83,7 +165,7 @@ class Tile:
             for i in range(3):
                 diff = c[i] - self.target_color[i]
                 if diff:
-                    c[i] -= 4 * math.copysign(1, diff)
+                    c[i] -= 10 * math.copysign(1, diff)
 
             self.color = tuple(c)
             self.surf.fill(self.color)
