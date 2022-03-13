@@ -116,6 +116,9 @@ class Board:
                     if self.subtiles[tile.letter].target_color != Tile.GREEN:
                         self.subtiles[tile.letter].set_target_color(Tile.ORANGE)
 
+                else:
+                    self.subtiles[tile.letter].set_target_color(SubTile.DARK_GREY)
+
                 pygame.draw.rect(self.screen, color="yellow", rect=tile.surf.get_rect(topleft=tile.pos), width=3)
 
             self.animation_frame += 1
@@ -235,3 +238,4 @@ class Tile:
 class SubTile(Tile):
     TILE_SIZE = 30
     CARAC_SIZE = 20
+    DARK_GREY = (100, 100, 100)
