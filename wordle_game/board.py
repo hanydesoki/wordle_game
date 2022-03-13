@@ -88,13 +88,18 @@ class Board:
 
                     elif event.key == pygame.K_BACKSPACE and self.letter_indice != 0:
                         self.board[self.current_try][self.letter_indice - 1].letter = ""
+                        self.board[self.current_try][self.letter_indice - 1].set_target_color(Tile.GREY)
                         self.letter_indice -= 1
 
                     else:
                         if self.letter_indice < self.number_letters:
                             key_pressed = event.unicode
                             if key_pressed in all_letters:
-                                self.board[self.current_try][self.letter_indice].letter = key_pressed.upper()
+                                tile = self.board[self.current_try][self.letter_indice]
+                                tile.letter = key_pressed.upper()
+                                color = self.subtiles[tile.letter].target_color
+                                if color == SubTile.DARK_GREY:
+                                    tile.set_target_color(color)
                                 self.letter_indice += 1
 
 
@@ -118,6 +123,7 @@ class Board:
                 else:
                     if self.subtiles[tile.letter].target_color not in [Tile.GREEN, Tile.ORANGE]:
                         self.subtiles[tile.letter].set_target_color(SubTile.DARK_GREY)
+
 
                 pygame.draw.rect(self.screen, color="yellow", rect=tile.surf.get_rect(topleft=tile.pos), width=3)
 
