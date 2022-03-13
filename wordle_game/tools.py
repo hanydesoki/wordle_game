@@ -11,7 +11,7 @@ class Button:
     BACKGROUND_COLOR = (100, 255, 100)
     PUSHED_BACKGROUND_COLOR = (100, 200, 100)
     EDGE_COLOR = (50, 200, 50)
-    TEXT_COLOR = (255, 200, 0)
+    TEXT_COLOR = (100, 100, 0)
     INACTIVE_TEXT_COLOR = (200, 200, 200)
 
     def __init__(self, x, y, text, size=20):
@@ -19,6 +19,7 @@ class Button:
 
         self.x = x
         self.y = y
+        self.text = text
 
         base_font = pygame.font.SysFont('arialblack', int(size))
         self.text_surface = base_font.render(str(text), True, self.TEXT_COLOR)

@@ -20,6 +20,16 @@ class Board:
         self.max_try = 6
         self.restart_button = Button(100, 50, "Restart", size=20)
 
+        self.len_word_buttons = []
+
+        for i in range(4, 12):
+            number = str(i)
+            if len(number) == 1:
+                number = " " + number
+            self.len_word_buttons.append(Button(130 + i * 50, 50, number, size=15))
+
+        self.give_up_button = Button(800, 50, "Give up", size=20)
+
         self.init(number_letters)
 
     def init(self, number_letters):
@@ -40,7 +50,7 @@ class Board:
         self.common_words = ALL_WORDS[number_letters]['common_words']
         self.word_to_guess = random.choice(self.common_words)
 
-        print(self.word_to_guess)
+        #print(self.word_to_guess)
 
         self.check_animating = False
         self.animation_indice = 0
@@ -136,9 +146,25 @@ class Board:
     def update_buttons(self):
         self.restart_button.update()
 
+        for b in self.len_word_buttons:
+            b.update()
+
+        self.give_up_button.update()
+
     def check_buttons(self):
         if self.restart_button.check_released():
             self.init(number_letters=self.number_letters)
+
+        for b in self.len_word_buttons:
+            if b.check_released():
+                number = int(b.text.strip())
+                if number != self.number_letters:
+                    self.init(number_letters=number)
+
+        if self.give_up_button.check_released():
+            self.playing = False
+            message = f"You lose: {self.word_to_guess}"
+            display_text(self.screen, message, 20, 500, size=30)
 
     def update(self, all_events):
         self.check_buttons()
