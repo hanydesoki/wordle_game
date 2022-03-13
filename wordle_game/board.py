@@ -1,11 +1,11 @@
 import pygame
 
 import math
-import string
 import random
+import string
 
 from .tools import Button, display_text
-from .utils import load_words
+from .utils import load_words, get_carac_count, init_carac_count
 
 all_letters = list(string.ascii_lowercase + string.ascii_uppercase)
 
@@ -41,10 +41,12 @@ class Board:
         self.word_to_guess = random.choice(self.common_words)
 
         #print(self.word_to_guess)
+
         self.check_animating = False
         self.animation_indice = 0
         self.animation_frame = 0
         self.max_animation_frame = 10
+        self.carac_counts = init_carac_count()
 
         self.playing = True
         self.win = False
@@ -85,16 +87,19 @@ class Board:
                                 self.letter_indice += 1
 
 
-
     def word_check_animation(self):
         if self.check_animating:
             if self.animation_frame == 0:
+                if self.animation_indice == 0:
+                    self.carac_counts = get_carac_count(self.word_to_guess)
                 tile = self.board[self.current_try - 1][self.animation_indice]
                 if tile.letter == self.word_to_guess[self.animation_indice]:
                     tile.set_target_color(Tile.GREEN)
+                    self.carac_counts[tile.letter] -= 1
 
-                elif tile.letter in self.word_to_guess:
+                elif self.carac_counts[tile.letter]:
                     tile.set_target_color(Tile.ORANGE)
+                    self.carac_counts[tile.letter] -= 1
 
                 pygame.draw.rect(self.screen, color="yellow", rect=tile.surf.get_rect(topleft=tile.pos), width=3)
 
@@ -105,6 +110,7 @@ class Board:
                 if self.animation_indice == self.number_letters:
                     self.animation_indice = 0
                     self.check_animating = False
+                    self.carac_counts = init_carac_count()
 
 
     def display_infos(self):

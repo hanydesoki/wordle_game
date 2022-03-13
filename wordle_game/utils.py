@@ -1,3 +1,7 @@
+import string
+
+LETTERS = list(string.ascii_uppercase)
+
 def load_words():
 
     result = {}
@@ -17,3 +21,15 @@ def load_words():
         result[i] = {'all_words': words, 'common_words': common_words}
 
     return result
+
+def init_carac_count():
+    return {c: 0 for c in LETTERS}
+
+
+def get_carac_count(word):
+    carac_count = init_carac_count()
+
+    for c in word:
+        carac_count[c] += 1
+
+    return carac_count
