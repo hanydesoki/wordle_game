@@ -61,6 +61,8 @@ class Board:
         self.playing = True
         self.win = False
 
+        self.subtiles = {l: SubTile(pos=(20 + i*37, 550), letter=l) for i, l in enumerate(list(string.ascii_uppercase))}
+
 
     def input(self, all_events):
         if not self.check_animating and self.playing:
@@ -106,10 +108,13 @@ class Board:
                 tile = self.board[self.current_try - 1][self.animation_indice]
                 if tile.letter == self.word_to_guess[self.animation_indice]:
                     tile.set_target_color(Tile.GREEN)
+                    self.subtiles[tile.letter].set_target_color(Tile.GREEN)
 
                 elif self.carac_counts[tile.letter]:
                     tile.set_target_color(Tile.ORANGE)
                     self.carac_counts[tile.letter] -= 1
+                    if self.subtiles[tile.letter].target_color != Tile.GREEN:
+                        self.subtiles[tile.letter].set_target_color(Tile.ORANGE)
 
                 pygame.draw.rect(self.screen, color="yellow", rect=tile.surf.get_rect(topleft=tile.pos), width=3)
 
@@ -143,6 +148,9 @@ class Board:
             for tile in row:
                 tile.update()
 
+        for subtile in self.subtiles.values():
+            subtile.update()
+
     def update_buttons(self):
         self.restart_button.update()
 
@@ -158,8 +166,13 @@ class Board:
         for b in self.len_word_buttons:
             if b.check_released():
                 number = int(b.text.strip())
-                if number != self.number_letters:
+                if number != self.number_letters or not self.playing:
                     self.init(number_letters=number)
+
+        if not self.playing:
+            self.give_up_button.active = False
+        else:
+            self.give_up_button.active = True
 
         if self.give_up_button.check_released():
             self.playing = False
@@ -174,14 +187,13 @@ class Board:
         self.word_check_animation()
         self.display_infos()
 
-
-
 class Tile:
     GREY = (150, 150, 150)
     GREEN = (150, 250, 150)
     ORANGE = (200, 200, 100)
 
     TILE_SIZE = 50
+    CARAC_SIZE = 30
 
     def __init__(self, pos, letter=""):
         self.screen = pygame.display.get_surface()
@@ -189,7 +201,7 @@ class Tile:
         self.letter = letter
         self.color = self.GREY
         self.target_color = self.color
-        self.font = pygame.font.SysFont('comicsans', size=30)
+        self.font = pygame.font.SysFont('comicsans', size=self.CARAC_SIZE)
         self.surf = pygame.Surface((self.TILE_SIZE, self.TILE_SIZE))
         self.surf.fill(self.color)
 
@@ -219,3 +231,7 @@ class Tile:
     def update(self):
         self.update_color()
         self.draw()
+
+class SubTile(Tile):
+    TILE_SIZE = 30
+    CARAC_SIZE = 20

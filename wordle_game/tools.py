@@ -55,19 +55,21 @@ class Button:
 
     def interact(self):
 
-        mouse_pos = pygame.mouse.get_pos()
+        if self.active:
 
-        pressed = pygame.mouse.get_pressed()[0]
+            mouse_pos = pygame.mouse.get_pos()
 
-        self.rect.x = self.x
-        self.rect.y = self.y
+            pressed = pygame.mouse.get_pressed()[0]
 
-        self.clicked = False
+            self.rect.x = self.x
+            self.rect.y = self.y
 
-        if pressed:
-            if self.rect.collidepoint(*mouse_pos):
-                self.clicked = True
-                self.rect.y += 3
+            self.clicked = False
+
+            if pressed:
+                if self.rect.collidepoint(*mouse_pos):
+                    self.clicked = True
+                    self.rect.y += 3
 
 
     def check_released(self, must_be_in=True):
