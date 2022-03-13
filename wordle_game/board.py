@@ -14,6 +14,7 @@ ALL_WORDS = load_words()
 class Board:
 
     OFFSET = 10
+    RED = (255, 100, 100)
 
     def __init__(self, number_letters=5):
         self.screen = pygame.display.get_surface()
@@ -21,6 +22,11 @@ class Board:
         self.restart_button = Button(100, 50, "Restart", size=20)
 
         self.len_word_buttons = []
+
+        self.error_background = pygame.Surface((self.screen.get_width(), self.screen.get_height()))
+        self.error_background.fill(self.RED)
+
+        self.alpha = 0
 
         for i in range(4, 12):
             number = str(i)
@@ -41,6 +47,7 @@ class Board:
         for i in range(self.max_try):
             self.board.append([Tile((self.x_min + j * (Tile.TILE_SIZE + self.OFFSET),
                                      self.y_min + i * (Tile.TILE_SIZE + self.OFFSET))) for j in range(self.number_letters)])
+
 
         self.current_try = 0
         self.letter_indice = 0
@@ -68,7 +75,10 @@ class Board:
             for event in all_events:
                 if event.type == pygame.KEYDOWN:
 
-                    if event.key == pygame.K_RETURN and self.letter_indice == self.number_letters:
+                    if event.key == pygame.K_RETURN and self.letter_indice != self.number_letters:
+                        self.alpha = 90
+
+                    elif event.key == pygame.K_RETURN and self.letter_indice == self.number_letters:
                         word = self.get_word_current_try()
                         if word in self.words:
                             self.check_animating = True
@@ -85,6 +95,9 @@ class Board:
                                 else:
                                     #print(f"You lose: {self.word_to_guess}")
                                     self.playing = False
+
+                        else:
+                            self.alpha = 90
 
                     elif event.key == pygame.K_BACKSPACE and self.letter_indice != 0:
                         self.board[self.current_try][self.letter_indice - 1].letter = ""
@@ -188,7 +201,16 @@ class Board:
             message = f"You lose: {self.word_to_guess}"
             display_text(self.screen, message, 20, 500, size=30)
 
+    def update_error_background(self):
+        self.error_background.set_alpha(self.alpha)
+        self.screen.blit(self.error_background, (0, 0))
+
+        self.alpha -= 10
+        self.alpha = max(self.alpha, 0)
+
+
     def update(self, all_events):
+        self.update_error_background()
         self.check_buttons()
         self.update_buttons()
         self.input(all_events)
@@ -198,7 +220,7 @@ class Board:
 
 class Tile:
     GREY = (150, 150, 150)
-    GREEN = (120, 230, 120)
+    GREEN = (50, 150, 50)
     ORANGE = (200, 200, 100)
 
     TILE_SIZE = 50
