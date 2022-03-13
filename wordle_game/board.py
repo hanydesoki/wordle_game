@@ -4,32 +4,12 @@ import math
 import string
 import random
 
-from .tools import Button
+from .tools import Button, display_text
+from .utils import load_words
 
 all_letters = list(string.ascii_lowercase + string.ascii_uppercase)
 
-def check_valid_word(word):
-    for caracter in word:
-        if caracter not in all_letters:
-            return False
-
-    return True
-
-def load_words(number_letters):
-    with open('liste_francais.txt', 'r') as f:
-        all_words = f.readlines()
-
-    result = []
-
-    for word in all_words:
-        w = word.replace('\n', '')
-        if check_valid_word(w) and len(w) == number_letters:
-            result.append(w.upper())
-
-    return result
-
-
-
+ALL_WORDS = load_words()
 
 class Board:
 
@@ -56,8 +36,9 @@ class Board:
         self.current_try = 0
         self.letter_indice = 0
 
-        self.words = load_words(number_letters)
-        self.word_to_guess = random.choice(self.words)
+        self.words = ALL_WORDS[number_letters]['all_words']
+        self.common_words = ALL_WORDS[number_letters]['common_words']
+        self.word_to_guess = random.choice(self.common_words)
 
         #print(self.word_to_guess)
         self.check_animating = False
@@ -66,6 +47,7 @@ class Board:
         self.max_animation_frame = 10
 
         self.playing = True
+        self.win = False
 
 
     def input(self, all_events):
@@ -80,15 +62,15 @@ class Board:
                             self.current_try += 1
                             self.letter_indice = 0
                             if word == self.word_to_guess:
-                                print("You win!")
+                                self.win = True
                                 self.playing = False
 
                             if self.current_try >= self.max_try:
                                 if word == self.word_to_guess:
-                                    print("You win!")
+                                    self.win = True
                                     self.playing = False
                                 else:
-                                    print(f"You lose: {self.word_to_guess}")
+                                    #print(f"You lose: {self.word_to_guess}")
                                     self.playing = False
 
                     elif event.key == pygame.K_BACKSPACE and self.letter_indice != 0:
@@ -101,6 +83,7 @@ class Board:
                             if key_pressed in all_letters:
                                 self.board[self.current_try][self.letter_indice].letter = key_pressed.upper()
                                 self.letter_indice += 1
+
 
 
     def word_check_animation(self):
@@ -124,7 +107,13 @@ class Board:
                     self.check_animating = False
 
 
-
+    def display_infos(self):
+        if not self.playing:
+            if self.win:
+                message = f"You win: {self.word_to_guess}"
+            else:
+                message = f"You lose: {self.word_to_guess}"
+            display_text(self.screen, message, 20, 500, size=30)
 
     def get_word_current_try(self):
         word = ""
@@ -151,6 +140,7 @@ class Board:
         self.input(all_events)
         self.update_tiles()
         self.word_check_animation()
+        self.display_infos()
 
 
 

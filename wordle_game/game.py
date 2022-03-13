@@ -20,7 +20,7 @@ class Game:
         self.background = pygame.Surface((self.screen_width, self.screen_height))
         self.background.fill(self.BACKGROUND_COLOR)
 
-        self.board = Board(5)
+        self.board = Board(6)
 
 
     def draw_background(self):
