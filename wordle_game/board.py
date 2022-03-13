@@ -41,7 +41,6 @@ class Board:
         for i in range(self.max_try):
             self.board.append([Tile((self.x_min + j * (Tile.TILE_SIZE + self.OFFSET),
                                      self.y_min + i * (Tile.TILE_SIZE + self.OFFSET))) for j in range(self.number_letters)])
-        #self.board[0][0].set_target_color(Tile.GREEN)
 
         self.current_try = 0
         self.letter_indice = 0
@@ -117,7 +116,8 @@ class Board:
                         self.subtiles[tile.letter].set_target_color(Tile.ORANGE)
 
                 else:
-                    self.subtiles[tile.letter].set_target_color(SubTile.DARK_GREY)
+                    if self.subtiles[tile.letter].target_color not in [Tile.GREEN, Tile.ORANGE]:
+                        self.subtiles[tile.letter].set_target_color(SubTile.DARK_GREY)
 
                 pygame.draw.rect(self.screen, color="yellow", rect=tile.surf.get_rect(topleft=tile.pos), width=3)
 
