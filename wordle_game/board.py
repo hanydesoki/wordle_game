@@ -40,7 +40,7 @@ class Board:
         self.common_words = ALL_WORDS[number_letters]['common_words']
         self.word_to_guess = random.choice(self.common_words)
 
-        #print(self.word_to_guess)
+        print(self.word_to_guess)
 
         self.check_animating = False
         self.animation_indice = 0
@@ -91,11 +91,11 @@ class Board:
         if self.check_animating:
             if self.animation_frame == 0:
                 if self.animation_indice == 0:
-                    self.carac_counts = get_carac_count(self.word_to_guess)
+                    word = "".join(tile.letter for tile in self.board[self.current_try - 1])
+                    self.carac_counts = get_carac_count(word, self.word_to_guess)
                 tile = self.board[self.current_try - 1][self.animation_indice]
                 if tile.letter == self.word_to_guess[self.animation_indice]:
                     tile.set_target_color(Tile.GREEN)
-                    self.carac_counts[tile.letter] -= 1
 
                 elif self.carac_counts[tile.letter]:
                     tile.set_target_color(Tile.ORANGE)

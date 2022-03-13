@@ -26,10 +26,11 @@ def init_carac_count():
     return {c: 0 for c in LETTERS}
 
 
-def get_carac_count(word):
+def get_carac_count(word, word_to_guess):
     carac_count = init_carac_count()
 
-    for c in word:
-        carac_count[c] += 1
+    for c1, c2 in zip(word, word_to_guess):
+        if c1 != c2:
+            carac_count[c2] += 1
 
     return carac_count
