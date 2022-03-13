@@ -198,7 +198,7 @@ class Board:
 
 class Tile:
     GREY = (150, 150, 150)
-    GREEN = (150, 250, 150)
+    GREEN = (120, 230, 120)
     ORANGE = (200, 200, 100)
 
     TILE_SIZE = 50

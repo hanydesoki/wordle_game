@@ -4,8 +4,8 @@ abri
 abus
 acte
 ados
+agir
 aide
-aies
 aigu
 aile
 aime
@@ -23,14 +23,11 @@ aout
 apte
 ardu
 arme
-aura
 auto
 aval
 avec
 aveu
-avez
 axis
-ayez
 azur
 aine
 baba
@@ -210,6 +207,7 @@ four
 frac
 fric
 froc
+fuir
 full
 fume
 fute
@@ -250,6 +248,7 @@ hola
 home
 homo
 hors
+huer
 huis
 huit
 hale
@@ -299,8 +298,10 @@ lent
 leur
 leve
 lien
+lier
 lieu
 lion
+lire
 live
 lobe
 loco
@@ -342,6 +343,7 @@ mont
 more
 mors
 mort
+muer
 muet
 must
 male
@@ -360,6 +362,7 @@ naif
 nerf
 neuf
 nice
+nier
 noir
 nord
 noue
@@ -376,6 +379,7 @@ onze
 oral
 orge
 orme
+oser
 ouah
 ours
 ouzo
@@ -430,6 +434,7 @@ prof
 pres
 pret
 puce
+puer
 puis
 pull
 puma
@@ -469,6 +474,7 @@ rond
 rose
 roux
 rude
+ruer
 rush
 ruse
 rale
@@ -490,7 +496,6 @@ seau
 sein
 sens
 sept
-sera
 seul
 sexe
 sexy
@@ -508,19 +513,17 @@ soda
 sofa
 soin
 soir
-sois
 soit
 soja
 solo
-sont
 sort
 souk
 sous
 soul
 spot
 stop
+suer
 suif
-suis
 surf
 tact
 tain
@@ -561,11 +564,14 @@ truc
 tres
 tsar
 tube
+tuer
 turc
 turf
 tutu
 type
 tetu
+unir
+user
 vain
 vase
 veau
@@ -586,6 +592,7 @@ vite
 vive
 vlan
 voeu
+voir
 vole
 vomi
 vote
@@ -615,6 +622,5 @@ etal
 etat
 etau
 etui
-etes
 etre
 ilot
