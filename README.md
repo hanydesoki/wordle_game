@@ -19,7 +19,7 @@ In a try, for each caracter it will indicate if the letter is in the right place
 
 ## Database:
 
-Words are cleaned with pandas and numpy in a notebook (extraction.ipynb) using a database from http://www.lexique.org/ which provide useful informations such as frequency of uses and its nature (Verbe, adjectif ...)
+Words are cleaned with pandas and numpy in a notebook (extraction.ipynb) using a database from http://www.lexique.org/ which provide useful informations such as frequency of uses and its nature (Verb, adjective ...)
 Thoses words are saved in Words directory.
 The program will only chose words that are singular and masculine or infinitive verb as a word to guess, but we can use any french word we want to fill the board.
 
