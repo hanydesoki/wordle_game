@@ -9,6 +9,8 @@ Run main.py to play the game. Need pygame module to run this app.
 Guess a random french word with six tries.
 In a try, for each caracter it will indicate if the letter is in the right place (green), if it is in the word but not in the right place (orange), or if it is not in the word at all (grey)
 
+![GitHub Logo](/preview.JPG)
+
 ## Functionalities:
 
 - Change from 4 to 11 caracters.
